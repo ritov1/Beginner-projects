@@ -1,35 +1,35 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from "react";
+import generateVideo from "./api";
 
-function App() {
-  const [count, setCount] = useState(0)
+const App = () => {
+  const [description, setDescription] = useState("");
+  const [videoPath, setVideoPath] = useState("");
+
+  const handleGenerate = async () => {
+    try {
+      const path = await generateVideo(description);
+      setVideoPath(path);
+    } catch {
+      alert("Failed to generate video");
+    }
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
-
+    <div>
+      <h1>AI Video Generator</h1>
+      <input
+        type="text"
+        placeholder="Enter video description"
+        value={description}
+        onChange={(e) => setDescription(e.target.value)}
+      />
+      <button onClick={handleGenerate}>Generate Video</button>
+      {videoPath && (
+        <video controls>
+          <source src={`http://localhost:3000/${videoPath}`} type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+        )}
+        </div>
+      )}
 export default App
